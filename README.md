@@ -1,6 +1,5 @@
-
-
 jQuery Dropdown Table Filter plugin:
+=============================
 
 A simple to use plugin to add dropdown filters for any table.  Filtering is instant and does not require a page reload.  
 

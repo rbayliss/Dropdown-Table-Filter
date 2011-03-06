@@ -1,9 +1,5 @@
 (function($) {
 
-$(document).ready(function() {
-  var s = $('table').ddTableFilter();
-});
-
 $.fn.ddTableFilter = function(options) {
   options = $.extend($.fn.ddTableFilter.defaultOptions, options);
   

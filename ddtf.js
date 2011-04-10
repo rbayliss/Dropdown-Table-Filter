@@ -1,8 +1,8 @@
 (function($) {
 
 $.fn.ddTableFilter = function(options) {
-  options = $.extend($.fn.ddTableFilter.defaultOptions, options);
-  
+  options = $.extend(true, $.fn.ddTableFilter.defaultOptions, options);
+
   return this.each(function() {
     if($(this).hasClass('ddtf-processed')) {
       refreshFilters(this);
@@ -18,7 +18,7 @@ $.fn.ddTableFilter = function(options) {
       var opts = new Array();
       selectbox.append('<option value="--all--">' + $(this).text() + '</option>');
       
-      var col = $('td:nth-child(' + (index + 1) + ')').each(function(index) {
+      var col = $('td:nth-child(' + (index + 1) + ')', table).each(function(index) {
         var cellVal = options.valueCallback.apply(this);
         if(cellVal.length == 0) {
           cellVal = '--empty--';

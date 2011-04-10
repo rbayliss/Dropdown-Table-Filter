@@ -18,7 +18,7 @@ $.fn.ddTableFilter = function(options) {
       var opts = new Array();
       selectbox.append('<option value="--all--">' + $(this).text() + '</option>');
       
-      var col = $('td:nth-child(' + (index + 1) + ')', table).each(function(index) {
+      var col = $('tr:not(.skip-filter) td:nth-child(' + (index + 1) + ')', table).each(function(index) {
         var cellVal = options.valueCallback.apply(this);
         if(cellVal.length == 0) {
           cellVal = '--empty--';
@@ -27,7 +27,7 @@ $.fn.ddTableFilter = function(options) {
         
         if($.inArray(cellVal, values) === -1) {
           var cellText = options.textCallback.apply(this);
-          if(cellText.length == 0) { cellText = options.emptyText; }
+          if(cellText.length == 0) {cellText = options.emptyText;}
           values.push(cellVal);
           opts.push({val:cellVal, text:cellText});
         }
@@ -66,6 +66,9 @@ $.fn.ddTableFilter = function(options) {
         
       });
       table.addClass('ddtf-processed');
+      if($.isFunction(options.afterBuild)) {
+        options.afterBuild.apply(table);
+      }
     });
     
     
@@ -80,14 +83,19 @@ $.fn.ddTableFilter = function(options) {
           options.transition.show.apply(row, options.transition.options);
         }
       });
-      var refreshEnd = new Date();
+
+      if($.isFunction(options.afterFilter)) {
+        options.afterFilter.apply(table);
+      }
+      
       if(options.debug) {
+        var refreshEnd = new Date();
         console.log('Refresh: ' + (refreshEnd.getTime() - refreshStart.getTime()) + 'ms');
       }
     }
     
-    var stop = new Date();
     if(options.debug) {
+      var stop = new Date();
       console.log('Build: ' + (stop.getTime() - start.getTime()) + 'ms');
     }
   });
@@ -104,6 +112,8 @@ $.fn.ddTableFilter.defaultOptions = {
   sortOptCallback: function(a, b) {
     return a.text.toLowerCase() > b.text.toLowerCase(); 
   },
+  afterFilter: null,
+  afterBuild: null,
   transition: {
     hide:$.fn.hide,
     show:$.fn.show,

@@ -48,6 +48,14 @@ For customization, the following parameters are available:
 *  sortOpt: A boolean indicating whether or not to sort the options.  This must be true for sortOptCallback to work.  Defaults to true.
 *  debug: A boolean indicating whether or not to run in "debug" mode.  Debug mode displays performance data.
 *  minOptions: Number of options required to show a select filter.  Defaults to 2, meaning if a column only has one unique value, no select box will be shown (what would be the point?).
+*  showFilterInteractions: A boolean indicating whether or not to add a "ddtf-optionunavailable" class to filter values that will interact with other already-applied filters to result in the table being completely filtered.  This helps avoid users wasting time on useless options, but does add some overhead and therefore may not be appropriate for very large tables, especially in restricted environments (mobile). 
+
+Markup Options
+--------------------
+The plugin will also take into account the following instructions in the table markup:
+
+*  "skip-filter" class on column headers ("th" elements) will cause the plugin to avoid that column.
+*  "filter-container-elementid" attribute on column headers ("th" elements) will cause the filtering drop-down to be created in the specified container element, instead of replacing the content of the header element.
 
 Compatibility
 -------------------

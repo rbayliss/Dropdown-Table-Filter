@@ -11,7 +11,7 @@ $.fn.ddTableFilter = function(options) {
     var table = $(this);
     var start = new Date();
     
-    $('th:visible', table).each(function(index) {
+    $('th', table).each(function(index) {
       if($(this).hasClass('skip-filter')) return;
       var selectbox = $('<select>');
       var values = [];
@@ -42,8 +42,14 @@ $.fn.ddTableFilter = function(options) {
         $(selectbox).append('<option value="' + this.val + '">' + this.text + '</option>')
       });
 
-      $(this).wrapInner('<div style="display:none">');
-      $(this).append(selectbox);
+      var targetID = $(this).attr('filter-container-elementid');
+      if(targetID) {
+        $("#" + targetID, table).append(selectbox);
+      }
+      else {
+        $(this).wrapInner('<div style="display:none">');
+        $(this).append(selectbox);
+      }
       
       selectbox.bind('change', {column:col}, function(event) {
         var changeStart = new Date();
@@ -84,6 +90,44 @@ $.fn.ddTableFilter = function(options) {
         }
       });
 
+      if (showFilterInteractions) {
+        //handle greying out of inapplicable filters
+        $('th', table).each(function(index) {
+          if($(this).hasClass('skip-filter')) return;
+          var values = [];
+          $('tr:not(.skip-filter)', table).each(function(rowindex) {
+            var rowValue;
+            var otherfilterHidesRow = false;
+            $('td', this).each(function(columnindex) {
+              if(columnindex === index) {
+                rowValue = $(this).attr('ddtf-value');
+              }
+              else {
+                if($(this).hasClass('ddtf-filtered'))
+                  otherfilterHidesRow = true;
+              }
+            });
+            if(!otherfilterHidesRow && $.inArray(rowValue, values) === -1)
+              values.push(rowValue);
+          });
+    
+          var targetID = $(this).attr('filter-container-elementid');
+          var $targetSelect;
+    
+          if(targetID)
+            $targetSelect = $("#" + targetID + ">select", table);
+          else
+            $targetSelect = $("select", this);
+    
+          $("option", $targetSelect).each(function(index) {
+            if($.inArray($(this).val(), values) === -1 && $(this).val() != '--all--')
+              $(this).addClass("ddtf-optionunavailable");
+            else
+              $(this).removeClass("ddtf-optionunavailable");
+          });
+        });
+      }
+        
       if($.isFunction(options.afterFilter)) {
         options.afterFilter.apply(table);
       }
@@ -121,6 +165,7 @@ $.fn.ddTableFilter.defaultOptions = {
   },
   emptyText:'--Empty--',
   sortOpt:true,
+  showFilterInteractions:false,
   debug:false,
   minOptions:2
 }

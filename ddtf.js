@@ -42,8 +42,14 @@ $.fn.ddTableFilter = function(options) {
         $(selectbox).append('<option value="' + this.val + '">' + this.text + '</option>')
       });
 
-      $(this).wrapInner('<div style="display:none">');
-      $(this).append(selectbox);
+      var targetID = $(this).attr('filter-container-elementid');
+      if(targetID) {
+        $("#" + targetID, table).append(selectbox);
+      }
+      else {
+        $(this).wrapInner('<div style="display:none">');
+        $(this).append(selectbox);
+      }
       
       selectbox.bind('change', {column:col}, function(event) {
         var changeStart = new Date();

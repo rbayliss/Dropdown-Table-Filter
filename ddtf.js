@@ -11,7 +11,7 @@ $.fn.ddTableFilter = function(options) {
     var table = $(this);
     var start = new Date();
     
-    $('th:visible', table).each(function(index) {
+    $('th', table).each(function(index) {
       if($(this).hasClass('skip-filter')) return;
       var selectbox = $('<select>');
       var values = [];

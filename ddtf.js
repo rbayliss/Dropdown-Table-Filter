@@ -10,21 +10,21 @@ $.fn.ddTableFilter = function(options) {
     }
     var table = $(this);
     var start = new Date();
-    
+
     $('th:visible', table).each(function(index) {
       if($(this).hasClass('skip-filter')) return;
       var selectbox = $('<select>');
       var values = [];
-      var opts = new Array();
+      var opts = [];
       selectbox.append('<option value="--all--">' + $(this).text() + '</option>');
-      
-      var col = $('tr:not(.skip-filter) td:nth-child(' + (index + 1) + ')', table).each(function(index) {
+
+      var col = $('tr:not(.skip-filter) td:nth-child(' + (index + 1) + ')', table).each(function() {
         var cellVal = options.valueCallback.apply(this);
         if(cellVal.length == 0) {
           cellVal = '--empty--';
         }
         $(this).attr('ddtf-value', cellVal);
-        
+
         if($.inArray(cellVal, values) === -1) {
           var cellText = options.textCallback.apply(this);
           if(cellText.length == 0) {cellText = options.emptyText;}
@@ -34,7 +34,7 @@ $.fn.ddTableFilter = function(options) {
       });
       if(opts.length < options.minOptions){
         return;
-      } 
+      }
       if(options.sortOpt) {
         opts.sort(options.sortOptCallback);
       }
@@ -44,11 +44,11 @@ $.fn.ddTableFilter = function(options) {
 
       $(this).wrapInner('<div style="display:none">');
       $(this).append(selectbox);
-      
+
       selectbox.bind('change', {column:col}, function(event) {
         var changeStart = new Date();
         var value = $(this).val();
-        
+
         event.data.column.each(function() {
           if($(this).attr('ddtf-value') === value || value == '--all--') {
             $(this).removeClass('ddtf-filtered');
@@ -62,16 +62,14 @@ $.fn.ddTableFilter = function(options) {
           console.log('Search: ' + (changeStop.getTime() - changeStart.getTime()) + 'ms');
         }
         refreshFilters(table);
-        var changeStop = new Date();
-        
+
       });
       table.addClass('ddtf-processed');
       if($.isFunction(options.afterBuild)) {
         options.afterBuild.apply(table);
       }
     });
-    
-    
+
     function refreshFilters(table) {
       var refreshStart = new Date();
       $('tr', table).each(function() {
@@ -87,30 +85,29 @@ $.fn.ddTableFilter = function(options) {
       if($.isFunction(options.afterFilter)) {
         options.afterFilter.apply(table);
       }
-      
+
       if(options.debug) {
         var refreshEnd = new Date();
         console.log('Refresh: ' + (refreshEnd.getTime() - refreshStart.getTime()) + 'ms');
       }
     }
-    
+
     if(options.debug) {
       var stop = new Date();
       console.log('Build: ' + (stop.getTime() - start.getTime()) + 'ms');
     }
   });
-  
-}
+};
 
 $.fn.ddTableFilter.defaultOptions = {
   valueCallback:function() {
-    return escape($.trim($(this).text()));
+    return encodeURIComponent($.trim($(this).text()));
   },
   textCallback:function() {
     return $.trim($(this).text());
   },
   sortOptCallback: function(a, b) {
-    return a.text.toLowerCase() > b.text.toLowerCase(); 
+    return a.text.toLowerCase() > b.text.toLowerCase();
   },
   afterFilter: null,
   afterBuild: null,
@@ -124,5 +121,5 @@ $.fn.ddTableFilter.defaultOptions = {
   debug:false,
   minOptions:2
 }
- 
+
 })(jQuery);

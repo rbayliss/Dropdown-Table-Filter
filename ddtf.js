@@ -35,6 +35,9 @@ $.fn.ddTableFilter = function(options) {
       if(opts.length < options.minOptions){
         return;
       }
+     if(options.skipFilterColumns.indexOf(index) != -1) {
+        return;
+      }
       if(options.sortOpt) {
         opts.sort(options.sortOptCallback);
       }
@@ -119,7 +122,8 @@ $.fn.ddTableFilter.defaultOptions = {
   emptyText:'--Empty--',
   sortOpt:true,
   debug:false,
-  minOptions:2
+  minOptions:2,
+  skipFilterColumns: []
 }
 
 })(jQuery);

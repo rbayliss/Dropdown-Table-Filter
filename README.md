@@ -9,7 +9,7 @@ HTML Structure:
 <tr>
   <th>Item #</th>
   <th>Type</th>
-  <th class="Skip-Filter">Price</th>
+  <th class="skip-filter">Price</th>
 </tr>
 <tr>
   <td>Item 1</td>
@@ -25,7 +25,7 @@ HTML Structure:
 
 This plugin requires a `<th>` for each column.  The label for the `<th>` will be replaced by a dropdown select menu containing all of the unique values present in that column.  In the above example, selecting "Special" for the type column would hide Item 2, leaving only item 1.
 
-Since we don't want to filter by things that only appear once (like price, maybe), we just add the class `Skip-Filter` to that column heading.
+Since we don't want to filter by things that only appear once (like price, maybe), we just add the class `skip-filter` to that column heading.
 
 For example:
 
@@ -33,7 +33,7 @@ For example:
 &lt;tr&gt;<br />
 &lt;th&gt;Item #&lt;/th&gt;<br />
 &lt;th&gt;Type&lt;/th&gt;<br />
-&lt;th class=&quot;Skip-Filter&quot;&gt;Price&lt;/th&gt;<br />
+&lt;th class=&quot;skip-filter&quot;&gt;Price&lt;/th&gt;<br />
 &lt;/tr&gt;
 </pre>
 

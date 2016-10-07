@@ -1,6 +1,6 @@
 (function($) {
 
-$.fn.ddTableFilter = function(options) {
+$.fn.ddTableFilter = function(options,callback) {
   options = $.extend(true, $.fn.ddTableFilter.defaultOptions, options);
 
   return this.each(function() {
@@ -16,7 +16,12 @@ $.fn.ddTableFilter = function(options) {
       var selectbox = $('<select>');
       var values = [];
       var opts = [];
-      selectbox.append('<option value="--all--">' + $(this).text() + '</option>');
+      
+	  if(options.firstOptionText != '') {
+	  	selectbox.append('<option value="--all--">' + options.firstOptionText + '</option>');
+	  } else {
+		selectbox.append('<option value="--all--">' + $(this).text() + '</option>');
+	  }
 
       var col = $('tr:not(.skip-filter) td:nth-child(' + (index + 1) + ')', table).each(function() {
         var cellVal = options.valueCallback.apply(this);
@@ -42,7 +47,12 @@ $.fn.ddTableFilter = function(options) {
         $(selectbox).append('<option value="' + this.val + '">' + this.text + '</option>')
       });
 
-      $(this).wrapInner('<div style="display:none">');
+      if(options.headingClass != '') {
+		  $(this).wrapInner('<div class="' + options.headingClass + '">');
+	  } else {
+		  $(this).wrapInner('<div style="display:none">');
+	  }
+	  
       $(this).append(selectbox);
 
       selectbox.bind('change', {column:col}, function(event) {
@@ -96,6 +106,9 @@ $.fn.ddTableFilter = function(options) {
       var stop = new Date();
       console.log('Build: ' + (stop.getTime() - start.getTime()) + 'ms');
     }
+	
+	callback();
+	
   });
 };
 
@@ -119,7 +132,9 @@ $.fn.ddTableFilter.defaultOptions = {
   emptyText:'--Empty--',
   sortOpt:true,
   debug:false,
-  minOptions:2
+  minOptions:2,
+  firstOptionText: '',
+  headingClass: ''
 }
 
 })(jQuery);

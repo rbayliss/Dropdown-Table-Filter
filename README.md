@@ -27,6 +27,16 @@ This plugin requires a `<th>` for each column.  The label for the `<th>` will be
 
 Since we don't want to filter by things that only appear once (like price, maybe), we just add the class `Skip-Filter` to that column heading.
 
+For example:
+
+<pre>
+&lt;tr&gt;<br />
+&lt;th&gt;Item #&lt;/th&gt;<br />
+&lt;th&gt;Type&lt;/th&gt;<br />
+&lt;th class=&quot;Skip-Filter&quot;&gt;Price&lt;/th&gt;<br />
+&lt;/tr&gt;
+</pre>
+
 How To Use
 -------------------
 It's simple.  Just include ddtf.js (along with jQuery), and do:
